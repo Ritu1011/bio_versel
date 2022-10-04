@@ -4,18 +4,16 @@ import "./mainStyle.css"
 import { useState } from 'react'
 import axios from 'axios'
 import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
 
-const Bio = () => {
+  const Bio = () => {
   const [city, setCity] = useState(!false);
   const [school, setSchool] = useState(!false);
   const [occupation, setOccupation] = useState(!false);
   const [religion, setReligion] = useState(!false);
   const [desire, setDesire] = useState(!false);
   const [image, setImage] = useState(!false);
-  const [pic, setPic] = useState(true)
-  const params = useParams();
-  const [file, setFile] = useState()
+  const [pic, setPic] = useState("https://d1vwxdpzbgdqj.cloudfront.net/assets/domain-specific-page/se-banner-03d237fdaf648377083bb9ffe79ac4dda695d820e15f35afed0a60f319bcd7ba.png")
+   const [file, setFile] = useState()
   const [data, setData] = useState({
     name: "",
     gender: "male",
@@ -112,6 +110,9 @@ const RandomData = (e) => {
       } else if (id === "desireId") {
         setDesire(false);
       }
+      else if (id == "imageId") {
+        setImage(false);
+      }
     }
     else if (!checkedData) {
       if (id === "cityId") {
@@ -126,10 +127,17 @@ const RandomData = (e) => {
       } else if (id === "desireId") {
         setDesire(true);
       }
+      else if (id == "imageId") {
+        setImage(true);
+      }
     }
   }
 
- 
+ ////////////////////////////
+ const ImageUploade= (e) => {
+  setFile(URL.createObjectURL(e.target.files[0]));
+  setPic(false)
+}
   //////////////////////////////////////
   const [options, setOptions] = useState([]);
   const [to, setTo] = useState('en');
@@ -161,8 +169,7 @@ const RandomData = (e) => {
         headers: { accept: 'application/json' },
       })
       .then((res) => {
-        // console.log(res.data);
-        setOptions(res.data);
+      setOptions(res.data);
       });
   }, []);
 
@@ -323,7 +330,23 @@ const RandomData = (e) => {
               <button  disabled={desire}
                name="desire"
                onClick={RandomData}>Any Lesson</button></div>
-              {/* </form> */}
+              
+              <div className="optionfile bio-element">
+              <span>
+                <span>
+                  <input
+                    type="checkbox"
+                    id="imageId"
+                    onChange={handleCheckbox}
+                  ></input>
+                </span>
+                <span>
+                  Upload File
+                  <input type="file" onChange={ImageUploade} disabled={image}/>
+                </span>
+                
+              </span>
+            </div>
               {/* //////////image///////////// */}
            
              
@@ -332,6 +355,11 @@ const RandomData = (e) => {
         {/* //////////////////////////////////// */}
         <div className="results">
           <h2>Result</h2>
+          <div className="bio-element">
+           <h3> Profile Pic</h3>
+          <img src={file} alt="" className="imgdisplay" style={{display:(pic) ? 'none' : 'block', height:"250px",width:"200px",margin:"auto"}}/>
+          </div>
+
 
         {/* ////////////////////////// */}
           <div className="bio-output">
